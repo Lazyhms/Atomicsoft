@@ -62,10 +62,8 @@ public class UnitTest1
         var t2 = Enum.GetNames<Tests>();
 
         Test[] t = [new Test { Id = 1, PId = 0, Name = "11" }, new Test { Id = 2, PId = 1, Name = "22" }];
-
-        var tttt = t.ToDictionary(k => k.Id, v => JsonSerializer.SerializeToNode(t));
-
         var tt = t.ToTreeNode(s => s.Id, p => p.PId).ToList();
+        var ttt2 = tt.FilterNode(f => f.Name == "22").ToList();
 
         var ttt = JsonSerializer.Serialize(tt, options);
     }

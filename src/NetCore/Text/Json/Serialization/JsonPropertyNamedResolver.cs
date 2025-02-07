@@ -6,7 +6,7 @@ namespace System.Text.Json.Serialization;
 
 internal static class JsonPropertyResolver
 {
-    private readonly static ConcurrentDictionary<FieldInfo, string> _mapping = new();
+    private static readonly ConcurrentDictionary<FieldInfo, string> _mapping = new();
 
     public static void AddEnumModifier(JsonTypeInfo jsonTypeInfo)
     {
@@ -38,12 +38,9 @@ internal static class JsonPropertyResolver
                 }
 
                 var fieldInfo = item.PropertyType.GetField(value.ToString()!);
-                if (fieldInfo is null)
-                {
-                    return jsonPropertyResolverAttribute.Default ?? string.Empty;
-                }
-
-                return _mapping.GetOrAdd(fieldInfo, GetDescriptionOrComment(fieldInfo));
+                return fieldInfo is null
+                    ? (jsonPropertyResolverAttribute.Default ?? string.Empty)
+                    : _mapping.GetOrAdd(fieldInfo, GetDescriptionOrComment(fieldInfo));
             };
             jsonTypeInfo.Properties.Add(jsonPropertyInfo);
         }
