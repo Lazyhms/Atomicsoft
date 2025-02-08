@@ -172,6 +172,10 @@ csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
 
 ## Naming conventions
+
+# EF1001: Internal EF Core API usage.
+dotnet_diagnostic.EF1001.severity = none
+
 [*.{cs,vb}]
 
 ## Naming styles

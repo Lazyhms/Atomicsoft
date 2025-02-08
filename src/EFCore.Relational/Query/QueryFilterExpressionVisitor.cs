@@ -14,25 +14,21 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
 
     private readonly QueryCompilationContext _queryCompilationContext;
 
-#pragma warning disable EF1001 // Internal EF Core API usage.
 #if NET8_0
     private readonly ParameterExtractingExpressionVisitor _parameterExtractingExpressionVisitor;
 #elif NET9_0
     private readonly ExpressionTreeFuncletizer _expressionTreeFuncletizer;
 #endif
-#pragma warning restore EF1001 // Internal EF Core API usage.
 
     public QueryFilterExpressionVisitor(QueryCompilationContext queryCompilationContext, IEvaluatableExpressionFilter evaluatableExpressionFilter)
     {
         _queryCompilationContext = queryCompilationContext;
 
-#pragma warning disable EF1001 // Internal EF Core API usage.
 #if NET8_0
         _parameterExtractingExpressionVisitor = new(evaluatableExpressionFilter, _parameters, queryCompilationContext.ContextType, queryCompilationContext.Model, queryCompilationContext.Logger, false, true);
 #elif NET9_0
         _expressionTreeFuncletizer = new(_queryCompilationContext.Model, evaluatableExpressionFilter, _queryCompilationContext.ContextType, generateContextAccessors: true, _queryCompilationContext.Logger);
 #endif
-#pragma warning restore EF1001 // Internal EF Core API usage.
     }
 
     public Expression ApplyStoredQueryFilter(Expression query)
@@ -109,13 +105,11 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
                 }
                 if (!storedFilterPredicate.TryGetValue(queryFilter.Key, out var filterPredicate))
                 {
-#pragma warning disable EF1001 // Internal EF Core API usage.
 #if NET8_0
                     filterPredicate = (LambdaExpression)_parameterExtractingExpressionVisitor.ExtractParameters(queryFilter.Value, false);
 #elif NET9_0
                     filterPredicate = (LambdaExpression)_expressionTreeFuncletizer.ExtractParameters(queryFilter.Value, _parameters, false, false);
 #endif
-#pragma warning restore EF1001 // Internal EF Core API usage.  
 
                     storedFilterPredicate[queryFilter.Key] = filterPredicate;
                 }
@@ -131,9 +125,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
         return base.VisitExtension(expression);
     }
 
-#pragma warning disable EF1001 // Internal EF Core API usage.
     private sealed class Parameters : IParameterValues
-#pragma warning restore EF1001 // Internal EF Core API usage.
     {
         private readonly Dictionary<string, object?> _parameterValues = [];
 
