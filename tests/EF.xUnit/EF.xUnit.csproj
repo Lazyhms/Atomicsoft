@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\EFCore.Mysql\EFCore.Mysql.csproj" />
+	  <ProjectReference Include="..\..\src\EFCore\EFCore.MySql\EFCore.MySql.csproj" />
 	</ItemGroup>
   
 </Project>
