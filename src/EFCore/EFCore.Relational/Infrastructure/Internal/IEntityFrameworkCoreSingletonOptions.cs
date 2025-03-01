@@ -2,9 +2,11 @@
 
 public interface IEntityFrameworkCoreSingletonOptions : ISingletonOptions
 {
-    List<string> XmlCommentPath { get; set; }
+    public bool EnableForeignKeyIndex { get; set; }
 
-    bool RemoveForeignKeyEnabled { get; set; }
+    public bool EnableForeignKeyConstraint { get; set; }
 
-    SoftDeleteOptions SoftDeleteOptions { get; set; }
+    public IEnumerable<string> XmlCommentPath { get; set; }
+
+    public SoftDeleteOptions SoftDeleteOptions { get; set; }
 }

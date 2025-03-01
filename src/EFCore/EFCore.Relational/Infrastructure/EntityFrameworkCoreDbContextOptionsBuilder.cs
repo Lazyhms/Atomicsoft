@@ -8,8 +8,11 @@ public class EntityFrameworkCoreDbContextOptionsBuilder(DbContextOptionsBuilder 
     private readonly Lazy<SoftDeleteSaveChangesInterceptor> _softDeleteSaveChangesInterceptor
         = new(() => new SoftDeleteSaveChangesInterceptor());
 
-    public EntityFrameworkCoreDbContextOptionsBuilder EnableRemoveForeignKey()
-        => WithOption(e => e.WithRemoveForeignKey());
+    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyIndex(bool enable = false)
+        => WithOption(e => e.WithForeignKeyIndex(enable));
+
+    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyConstraint(bool enable = false)
+        => WithOption(e => e.WithForeignKeyConstraint(enable));
 
     public EntityFrameworkCoreDbContextOptionsBuilder IncludeXmlComments()
         => WithOption(e => e.WithXmlCommentPath(Directory.GetFiles(AppContext.BaseDirectory, "*.xml")));
@@ -20,22 +23,10 @@ public class EntityFrameworkCoreDbContextOptionsBuilder(DbContextOptionsBuilder 
     public EntityFrameworkCoreDbContextOptionsBuilder IncludeXmlComments(IEnumerable<string> filePath)
         => WithOption(e => e.WithXmlCommentPath(filePath));
 
-    public EntityFrameworkCoreDbContextOptionsBuilder UseSoftDelete()
+    public EntityFrameworkCoreDbContextOptionsBuilder UseSoftDelete(bool enable = true, string name = "Deleted", string comment = "Soft Delete")
     {
         optionsBuilder.AddInterceptors(_softDeleteSaveChangesInterceptor.Value);
-        return WithOption(e => e.WithSoftDelete());
-    }
-
-    public EntityFrameworkCoreDbContextOptionsBuilder UseSoftDelete(string name)
-    {
-        optionsBuilder.AddInterceptors(_softDeleteSaveChangesInterceptor.Value);
-        return WithOption(e => e.WithSoftDelete(name, string.Empty));
-    }
-
-    public EntityFrameworkCoreDbContextOptionsBuilder UseSoftDelete(string name, string comment)
-    {
-        optionsBuilder.AddInterceptors(_softDeleteSaveChangesInterceptor.Value);
-        return WithOption(e => e.WithSoftDelete(name, comment));
+        return WithOption(e => e.WithSoftDelete(enable, name, comment));
     }
 
     private EntityFrameworkCoreDbContextOptionsBuilder WithOption(Func<EntityFrameworkCoreDbContextOptionsExtension, EntityFrameworkCoreDbContextOptionsExtension> setAction)

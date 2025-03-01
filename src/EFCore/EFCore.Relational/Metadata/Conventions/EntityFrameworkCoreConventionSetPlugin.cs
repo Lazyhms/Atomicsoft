@@ -10,7 +10,7 @@ public class EntityFrameworkCoreConventionSetPlugin(
 
     public virtual ConventionSet ModifyConventions(ConventionSet conventionSet)
     {
-        if (entityFrameworkCoreSingletonOptions.RemoveForeignKeyEnabled)
+        if (!entityFrameworkCoreSingletonOptions.EnableForeignKeyIndex)
         {
             conventionSet.Remove(typeof(ForeignKeyIndexConvention));
         }
@@ -34,6 +34,11 @@ public class EntityFrameworkCoreConventionSetPlugin(
         var tableAndColumnCommentConvention = new TableAndColumnCommentConvention(entityFrameworkCoreSingletonOptions);
         conventionSet.ModelFinalizingConventions.Add(tableAndColumnCommentConvention);
 
+        if (!entityFrameworkCoreSingletonOptions.EnableForeignKeyConstraint)
+        {
+            var noneForeignKeyConstraint = new NoneForeignKeyConstraint();
+            conventionSet.ModelFinalizingConventions.Add(noneForeignKeyConstraint);
+        }
         return conventionSet;
     }
 }

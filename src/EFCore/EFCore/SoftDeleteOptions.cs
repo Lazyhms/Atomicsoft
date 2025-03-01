@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.EntityFrameworkCore;
 
-public sealed class SoftDeleteOptions(string name, string comment)
+public sealed class SoftDeleteOptions(string name, string? comment)
 {
     public SoftDeleteOptions() : this("Deleted", string.Empty)
     {
@@ -8,7 +8,7 @@ public sealed class SoftDeleteOptions(string name, string comment)
 
     public string Name { get; init; } = name;
 
-    public string Comment { get; init; } = comment;
+    public string? Comment { get; init; } = comment;
 
     public int Order { get; init; } = 100;
 
