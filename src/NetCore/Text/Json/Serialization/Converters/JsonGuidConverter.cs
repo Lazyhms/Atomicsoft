@@ -9,8 +9,16 @@ public sealed class JsonGuidConverter(JsonGuidHandling? jsonGuidHandling) : Json
     {
     }
 
-    public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        => s_defaultConverter.Read(ref reader, typeToConvert, options);
+    public override Guid Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType == JsonTokenType.String
+            ? Guid.TryParseExact(reader.GetString(), jsonGuidHandling switch
+            {
+                JsonGuidHandling.Digits => "N",
+                JsonGuidHandling.Braces => "B",
+                JsonGuidHandling.Parentheses => "P",
+                JsonGuidHandling.Hexadecimal => "X",
+                JsonGuidHandling.Hyphens or _ => "D",
+            }, out var result) ? result : s_defaultConverter.Read(ref reader, typeToConvert, options)
+            : s_defaultConverter.Read(ref reader, typeToConvert, options);
 
     public override void Write(Utf8JsonWriter writer, Guid value, JsonSerializerOptions options)
     {

@@ -11,24 +11,14 @@ public sealed class JsonDateTimeConverter(string dateFormatString) : JsonConvert
     {
     }
 
-    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TryGetDateTime(out var result))
-        {
-            return result;
-        }
-        if (DateTime.TryParse(reader.GetString(), out result))
-        {
-            return result;
-        }
-        if (DateTime.TryParseExact(reader.GetString(), dateFormatString, CultureInfo.CurrentCulture, DateTimeStyles.None, out result))
-        {
-            return result;
-        }
-        return s_defaultConverter.Read(ref reader, typeToConvert, options);
-    }
+    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TryGetDateTime(out var result)
+            ? result
+            : DateTime.TryParse(reader.GetString(), out result)
+            ? result
+            : DateTime.TryParseExact(reader.GetString(), dateFormatString, CultureInfo.CurrentCulture, DateTimeStyles.None, out result)
+            ? result
+            : s_defaultConverter.Read(ref reader, typeToConvert, options);
 
-    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-        => writer.WriteStringValue(value.ToString(dateFormatString));
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(dateFormatString));
 
 }
