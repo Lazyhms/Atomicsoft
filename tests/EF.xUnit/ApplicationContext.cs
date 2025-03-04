@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EF.XUnit;
 
@@ -10,6 +11,7 @@ public class ApplicationContext : DbContext
     /// <inheritdoc/>
     public ApplicationContext()
     {
+        Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 
@@ -57,7 +59,8 @@ public class ApplicationContext : DbContext
         {
             optionsBuilder.UseSoftDelete();
             optionsBuilder.IncludeXmlComments();
-            optionsBuilder.EnableRemoveForeignKey();
+            optionsBuilder.EnableForeignKeyIndex();
+            optionsBuilder.EnableForeignKeyConstraint();
         });
 
         optionsBuilder.EnableSensitiveDataLogging();
@@ -90,6 +93,11 @@ public class School : EntityBase
     /// 价位
     /// </summary>
     public decimal Price { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public virtual IList<Stu> Stu { get; set; }
 }
 
 /// <summary>
