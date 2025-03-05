@@ -10,6 +10,11 @@ public class EntityFrameworkCoreConventionSetPlugin(
 
     public virtual ConventionSet ModifyConventions(ConventionSet conventionSet)
     {
+        if (entityFrameworkCoreSingletonOptions.EnableForeignKeyIndex)
+        {
+            conventionSet.Remove(typeof(ForeignKeyIndexConvention));
+        }
+
         var columnDefaultValueConvention = new ColumnDefaultValueConvention(Dependencies);
         conventionSet.PropertyAddedConventions.Add(columnDefaultValueConvention);
         conventionSet.PropertyFieldChangedConventions.Add(columnDefaultValueConvention);

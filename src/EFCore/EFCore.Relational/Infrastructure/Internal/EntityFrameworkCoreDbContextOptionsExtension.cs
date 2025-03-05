@@ -1,6 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Globalization;
-using System.Text;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
@@ -15,6 +14,8 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
     public EntityFrameworkCoreDbContextOptionsExtension()
     {
         _xPathDocumentPath = [];
+        _enableForeignKeyIndex = false;
+        _enableForeignKeyConstraint = false;
         _softDeleteOptions = new SoftDeleteOptions();
     }
 
@@ -22,6 +23,8 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
     {
         _softDeleteOptions = copyFrom._softDeleteOptions;
         _xPathDocumentPath = copyFrom._xPathDocumentPath;
+        _enableForeignKeyIndex = copyFrom._enableForeignKeyIndex;
+        _enableForeignKeyConstraint = copyFrom._enableForeignKeyConstraint;
     }
 
     public DbContextOptionsExtensionInfo Info
@@ -106,7 +109,7 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
                 hashCode.Add(Extension._softDeleteOptions);
                 hashCode.Add(Extension._xPathDocumentPath);
                 hashCode.Add(Extension._enableForeignKeyIndex);
-
+                hashCode.Add(Extension._enableForeignKeyConstraint);
                 _serviceProviderHash = hashCode.ToHashCode();
             }
 
@@ -126,7 +129,11 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
 
         public override bool ShouldUseSameServiceProvider(DbContextOptionsExtensionInfo other)
             => other is ExtensionInfo otherInfo
-                && Extension._softDeleteOptions == otherInfo.Extension._softDeleteOptions
-                && Extension._enableForeignKeyIndex == otherInfo.Extension._enableForeignKeyIndex;
+                && Extension._xPathDocumentPath == otherInfo.Extension.XmlCommentPath
+                && Extension._enableForeignKeyIndex == otherInfo.Extension._enableForeignKeyIndex
+                && Extension._softDeleteOptions.Name == otherInfo.Extension._softDeleteOptions.Name
+                && Extension._softDeleteOptions.Comment == otherInfo.Extension._softDeleteOptions.Comment
+                && Extension._softDeleteOptions.Enabled == otherInfo.Extension._softDeleteOptions.Enabled
+                && Extension._enableForeignKeyConstraint == otherInfo.Extension._enableForeignKeyConstraint;
     }
 }

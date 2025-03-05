@@ -28,6 +28,7 @@ internal sealed class TableAndColumnCommentConvention : IModelFinalizingConventi
             {
                 ProcessSoftDeleteModelFinalizing(conventionEntityType);
             }
+
             ProcessCommentModelFinalizing(conventionEntityType);
             ProcessColumnOrderModelFinalizing(conventionEntityType);
         }

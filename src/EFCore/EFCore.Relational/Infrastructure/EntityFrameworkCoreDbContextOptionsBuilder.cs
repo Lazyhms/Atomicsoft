@@ -8,10 +8,10 @@ public class EntityFrameworkCoreDbContextOptionsBuilder(DbContextOptionsBuilder 
     private readonly Lazy<SoftDeleteSaveChangesInterceptor> _softDeleteSaveChangesInterceptor
         = new(() => new SoftDeleteSaveChangesInterceptor());
 
-    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyIndex(bool enable = false)
+    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyIndex(bool enable = true)
         => WithOption(e => e.WithForeignKeyIndex(enable));
 
-    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyConstraint(bool enable = false)
+    public EntityFrameworkCoreDbContextOptionsBuilder EnableForeignKeyConstraint(bool enable = true)
         => WithOption(e => e.WithForeignKeyConstraint(enable));
 
     public EntityFrameworkCoreDbContextOptionsBuilder IncludeXmlComments()

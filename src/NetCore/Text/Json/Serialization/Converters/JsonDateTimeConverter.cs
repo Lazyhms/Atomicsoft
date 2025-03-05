@@ -11,7 +11,8 @@ public sealed class JsonDateTimeConverter(string dateFormatString) : JsonConvert
     {
     }
 
-    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TryGetDateTime(out var result)
+    public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        => reader.TryGetDateTime(out var result)
             ? result
             : DateTime.TryParse(reader.GetString(), out result)
             ? result
@@ -19,6 +20,7 @@ public sealed class JsonDateTimeConverter(string dateFormatString) : JsonConvert
             ? result
             : s_defaultConverter.Read(ref reader, typeToConvert, options);
 
-    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(dateFormatString));
+    public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        => writer.WriteStringValue(value.ToString(dateFormatString));
 
 }

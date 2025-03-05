@@ -59,8 +59,6 @@ public class ApplicationContext : DbContext
         {
             optionsBuilder.UseSoftDelete();
             optionsBuilder.IncludeXmlComments();
-            optionsBuilder.EnableForeignKeyIndex();
-            optionsBuilder.EnableForeignKeyConstraint();
         });
 
         optionsBuilder.EnableSensitiveDataLogging();

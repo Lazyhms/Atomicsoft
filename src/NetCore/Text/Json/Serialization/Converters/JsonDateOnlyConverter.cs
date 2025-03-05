@@ -11,9 +11,11 @@ public sealed class JsonDateOnlyConverter(string dateFormatString) : JsonConvert
     {
     }
 
-    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => DateOnly.TryParseExact(reader.GetString(), dateFormatString, CultureInfo.CurrentCulture, DateTimeStyles.None, out var result)
+    public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        => DateOnly.TryParseExact(reader.GetString(), dateFormatString, CultureInfo.CurrentCulture, DateTimeStyles.None, out var result)
             ? result : s_defaultConverter.Read(ref reader, typeToConvert, options);
 
-    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(dateFormatString));
+    public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
+        => writer.WriteStringValue(value.ToString(dateFormatString));
 
 }
