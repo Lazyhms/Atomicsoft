@@ -5,8 +5,8 @@ namespace Microsoft.EntityFrameworkCore.Infrastructure.Internal;
 
 public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExtension
 {
+    private bool _enableForeignKey;
     private bool _enableForeignKeyIndex;
-    private bool _enableForeignKeyConstraint;
     private SoftDeleteOptions _softDeleteOptions;
     private DbContextOptionsExtensionInfo? _info;
     private IEnumerable<string> _xPathDocumentPath;
@@ -15,16 +15,15 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
     {
         _xPathDocumentPath = [];
         _enableForeignKeyIndex = false;
-        _enableForeignKeyConstraint = false;
         _softDeleteOptions = new SoftDeleteOptions();
     }
 
     protected EntityFrameworkCoreDbContextOptionsExtension(EntityFrameworkCoreDbContextOptionsExtension copyFrom)
     {
+        _enableForeignKey = copyFrom._enableForeignKey;
         _softDeleteOptions = copyFrom._softDeleteOptions;
         _xPathDocumentPath = copyFrom._xPathDocumentPath;
         _enableForeignKeyIndex = copyFrom._enableForeignKeyIndex;
-        _enableForeignKeyConstraint = copyFrom._enableForeignKeyConstraint;
     }
 
     public DbContextOptionsExtensionInfo Info
@@ -33,17 +32,17 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
     protected virtual EntityFrameworkCoreDbContextOptionsExtension Clone()
         => new(this);
 
+    public virtual EntityFrameworkCoreDbContextOptionsExtension WithForeignKey(bool enable = false)
+    {
+        var clone = Clone();
+        clone._enableForeignKey = enable;
+        return clone;
+    }
+
     public virtual EntityFrameworkCoreDbContextOptionsExtension WithForeignKeyIndex(bool enable = false)
     {
         var clone = Clone();
         clone._enableForeignKeyIndex = enable;
-        return clone;
-    }
-
-    public virtual EntityFrameworkCoreDbContextOptionsExtension WithForeignKeyConstraint(bool enable = false)
-    {
-        var clone = Clone();
-        clone._enableForeignKeyConstraint = enable;
         return clone;
     }
 
@@ -61,11 +60,11 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
         return clone;
     }
 
+    public virtual bool EnableForeignKey
+        => _enableForeignKey;
+
     public virtual bool EnableForeignKeyIndex
         => _enableForeignKeyIndex;
-
-    public virtual bool EnableForeignKeyConstraint
-        => _enableForeignKeyConstraint;
 
     public virtual SoftDeleteOptions SoftDeleteOptions
         => _softDeleteOptions;
@@ -77,11 +76,21 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
     {
         services.AddEntityFrameworkCoreServices();
 
-        var serviceDescriptor = services.FirstOrDefault(f => f.ServiceType == typeof(IQueryTranslationPreprocessorFactory));
-        if (serviceDescriptor is not null && serviceDescriptor.ImplementationType is not null)
+        var serviceDescriptor1 = services.FirstOrDefault(f => f.ServiceType == typeof(IQueryTranslationPreprocessorFactory));
+        if (serviceDescriptor1 is not null && serviceDescriptor1.ImplementationType is not null)
         {
-            services.Add(new ServiceDescriptor(serviceDescriptor.ImplementationType, serviceDescriptor.ImplementationType, serviceDescriptor.Lifetime));
-            services.Replace(new ServiceDescriptor(serviceDescriptor.ServiceType, typeof(QueryTranslationPreprocessorFactory<>).MakeGenericType(serviceDescriptor.ImplementationType), serviceDescriptor.Lifetime));
+            services.Add(new ServiceDescriptor(serviceDescriptor1.ImplementationType, serviceDescriptor1.ImplementationType, serviceDescriptor1.Lifetime));
+            services.Replace(new ServiceDescriptor(serviceDescriptor1.ServiceType, typeof(QueryTranslationPreprocessorFactory<>).MakeGenericType(serviceDescriptor1.ImplementationType), serviceDescriptor1.Lifetime));
+        }
+
+        if (!EnableForeignKey)
+        {
+            var serviceDescriptor2 = services.FirstOrDefault(f => f.ServiceType == typeof(IMigrationsSqlGenerator));
+            if (serviceDescriptor2 is not null && serviceDescriptor2.ImplementationType is not null)
+            {
+                services.Add(new ServiceDescriptor(serviceDescriptor2.ImplementationType, serviceDescriptor2.ImplementationType, serviceDescriptor2.Lifetime));
+                services.Replace(new ServiceDescriptor(serviceDescriptor2.ServiceType, typeof(MigrationsSqlGenerator<>).MakeGenericType(serviceDescriptor2.ImplementationType), serviceDescriptor2.Lifetime));
+            }
         }
     }
 
@@ -109,10 +118,8 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
                 hashCode.Add(Extension._softDeleteOptions);
                 hashCode.Add(Extension._xPathDocumentPath);
                 hashCode.Add(Extension._enableForeignKeyIndex);
-                hashCode.Add(Extension._enableForeignKeyConstraint);
                 _serviceProviderHash = hashCode.ToHashCode();
             }
-
             return _serviceProviderHash.Value;
         }
 
@@ -133,7 +140,6 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
                 && Extension._enableForeignKeyIndex == otherInfo.Extension._enableForeignKeyIndex
                 && Extension._softDeleteOptions.Name == otherInfo.Extension._softDeleteOptions.Name
                 && Extension._softDeleteOptions.Comment == otherInfo.Extension._softDeleteOptions.Comment
-                && Extension._softDeleteOptions.Enabled == otherInfo.Extension._softDeleteOptions.Enabled
-                && Extension._enableForeignKeyConstraint == otherInfo.Extension._enableForeignKeyConstraint;
+                && Extension._softDeleteOptions.Enabled == otherInfo.Extension._softDeleteOptions.Enabled;
     }
 }

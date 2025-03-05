@@ -10,7 +10,7 @@ public class EntityFrameworkCoreConventionSetPlugin(
 
     public virtual ConventionSet ModifyConventions(ConventionSet conventionSet)
     {
-        if (entityFrameworkCoreSingletonOptions.EnableForeignKeyIndex)
+        if (!entityFrameworkCoreSingletonOptions.EnableForeignKeyIndex)
         {
             conventionSet.Remove(typeof(ForeignKeyIndexConvention));
         }

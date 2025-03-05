@@ -19,7 +19,6 @@ public class EntityFrameworkCoreSingletonOptions : IEntityFrameworkCoreSingleton
             XmlCommentPath = metioCoreOptionsExtension.XmlCommentPath;
             SoftDeleteOptions = metioCoreOptionsExtension.SoftDeleteOptions;
             EnableForeignKeyIndex = metioCoreOptionsExtension.EnableForeignKeyIndex;
-            EnableForeignKeyConstraint = metioCoreOptionsExtension.EnableForeignKeyConstraint;
         }
     }
 

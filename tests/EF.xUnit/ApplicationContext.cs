@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Logging;
 
 namespace EF.XUnit;
@@ -59,6 +58,8 @@ public class ApplicationContext : DbContext
         {
             optionsBuilder.UseSoftDelete();
             optionsBuilder.IncludeXmlComments();
+            optionsBuilder.EnableForeignKey();
+            optionsBuilder.EnableForeignKeyIndex();
         });
 
         optionsBuilder.EnableSensitiveDataLogging();
