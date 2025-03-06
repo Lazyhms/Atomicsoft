@@ -36,7 +36,7 @@ public class DbSetTests
     public async Task EUpdate()
     {
         await _context.Set<School>().IgnoreQueryFilters("Name").ExecuteDeleteOrSoftDeleteAsync();
-        await _context.Set<School>().IgnoreQueryFilters("Name").ExecuteDeleteOrSoftDeleteAsync();
+        await _context.Set<School>().IgnoreQueryFilters(s => s.Domain).ExecuteDeleteOrSoftDeleteAsync();
     }
 
     [Fact]
