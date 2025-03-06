@@ -1,9 +1,9 @@
 ﻿
 namespace Microsoft.EntityFrameworkCore.Migrations;
 
-public class MigrationsSqlGenerator<TIMigrationsSqlGenerator>(
-    MigrationsSqlGeneratorDependencies dependencies, TIMigrationsSqlGenerator migrationsSqlGenerator)
-    : MigrationsSqlGenerator(dependencies), IMigrationsSqlGenerator where TIMigrationsSqlGenerator : IMigrationsSqlGenerator
+public class MigrationsSqlGenerator<TMigrationsSqlGenerator>(
+    MigrationsSqlGeneratorDependencies dependencies, TMigrationsSqlGenerator migrationsSqlGenerator)
+    : MigrationsSqlGenerator(dependencies), IMigrationsSqlGenerator where TMigrationsSqlGenerator : IMigrationsSqlGenerator
 {
     public override IReadOnlyList<MigrationCommand> Generate(IReadOnlyList<MigrationOperation> operations, IModel? model = null, MigrationsSqlGenerationOptions options = MigrationsSqlGenerationOptions.Default)
     {

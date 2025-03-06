@@ -1,10 +1,10 @@
 ﻿namespace Microsoft.EntityFrameworkCore.Query;
 
-public class QueryTranslationPreprocessorFactory<TInnerQueryTranslationPreprocessorFactory>(
+public class QueryTranslationPreprocessorFactory<TQueryTranslationPreprocessorFactory>(
     QueryTranslationPreprocessorDependencies dependencies,
-    TInnerQueryTranslationPreprocessorFactory innerQueryTranslationPreprocessorFactory)
+    TQueryTranslationPreprocessorFactory innerQueryTranslationPreprocessorFactory)
         : IQueryTranslationPreprocessorFactory
-            where TInnerQueryTranslationPreprocessorFactory : IQueryTranslationPreprocessorFactory
+            where TQueryTranslationPreprocessorFactory : IQueryTranslationPreprocessorFactory
 {
     public QueryTranslationPreprocessor Create(QueryCompilationContext queryCompilationContext)
         => new QueryFilterQueryTranslationPreprocessor(
