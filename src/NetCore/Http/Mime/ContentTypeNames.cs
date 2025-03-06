@@ -38,80 +38,69 @@ public static class ContentTypeNames
 
         public const string Zip = "application/zip";
 
-        public static class Excel
-        {
-            public const string Xla = "application/vnd.ms-excel";
+        public const string Xla = "application/vnd.ms-excel";
 
-            public const string Xlc = "application/vnd.ms-excel";
+        public const string Xlc = "application/vnd.ms-excel";
 
-            public const string Xld = "application/vnd.ms-excel";
+        public const string Xld = "application/vnd.ms-excel";
 
-            public const string Xlk = "application/vnd.ms-excel";
+        public const string Xlk = "application/vnd.ms-excel";
 
-            public const string Xll = "application/vnd.ms-excel";
+        public const string Xll = "application/vnd.ms-excel";
 
-            public const string Xlm = "application/vnd.ms-excel";
+        public const string Xlm = "application/vnd.ms-excel";
 
-            public const string Xls = "application/vnd.ms-excel";
+        public const string Xls = "application/vnd.ms-excel";
 
-            public const string Xlt = "application/vnd.ms-excel";
+        public const string Xlt = "application/vnd.ms-excel";
 
-            public const string Xlw = "application/vnd.ms-excel";
+        public const string Xlw = "application/vnd.ms-excel";
 
-            public const string Xlam = "application/vnd.ms-excel.addin.macroEnabled.12";
+        public const string Xlam = "application/vnd.ms-excel.addin.macroEnabled.12";
 
-            public const string Xlsm = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        public const string Xlsm = "application/vnd.ms-excel.sheet.macroEnabled.12";
 
-            public const string Xltm = "application/vnd.ms-excel.template.macroEnabled.12";
+        public const string Xltm = "application/vnd.ms-excel.template.macroEnabled.12";
 
-            public const string Xlsb = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        public const string Xlsb = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
 
-            public const string Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        public const string Xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-            public const string Xltx = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-        }
+        public const string Xltx = "application/vnd.openxmlformats-officedocument.spreadsheetml.template";
 
-        public static class Word
-        {
-            public const string Doc = "application/msword";
+        public const string Doc = "application/msword";
 
-            public const string Dot = "application/msword";
+        public const string Dot = "application/msword";
 
-            public const string Docm = "application/vnd.ms-word.document.macroEnabled.12";
+        public const string Docm = "application/vnd.ms-word.document.macroEnabled.12";
 
-            public const string Dotm = "application/vnd.ms-word.template.macroEnabled.12";
+        public const string Dotm = "application/vnd.ms-word.template.macroEnabled.12";
 
-            public const string Docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        public const string Docx = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-            public const string Dotx = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-        }
+        public const string Dotx = "application/vnd.openxmlformats-officedocument.wordprocessingml.template";
 
-        public static class Powerpoint
-        {
-            public const string Ppm = "image/x-portable-pixmap";
+        public const string Pot = "application/vnd.ms-powerpoint";
 
-            public const string Pot = "application/vnd.ms-powerpoint";
+        public const string Ppa = "application/vnd.ms-powerpoint";
 
-            public const string Ppa = "application/vnd.ms-powerpoint";
+        public const string Pps = "application/vnd.ms-powerpoint";
 
-            public const string Pps = "application/vnd.ms-powerpoint";
+        public const string Ppt = "application/vnd.ms-powerpoint";
 
-            public const string Ppt = "application/vnd.ms-powerpoint";
+        public const string Ppam = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
 
-            public const string Ppam = "application/vnd.ms-powerpoint.addin.macroEnabled.12";
+        public const string Potm = "application/vnd.ms-powerpoint.template.macroEnabled.12";
 
-            public const string Potm = "application/vnd.ms-powerpoint.template.macroEnabled.12";
+        public const string Ppsm = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
 
-            public const string Ppsm = "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
+        public const string Pptm = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
 
-            public const string Pptm = "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
+        public const string Potx = "application/vnd.openxmlformats-officedocument.presentationml.template";
 
-            public const string Potx = "application/vnd.openxmlformats-officedocument.presentationml.template";
+        public const string Ppsx = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
 
-            public const string Ppsx = "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-
-            public const string Pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
-        }
+        public const string Pptx = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
     }
 
     public static class Image
@@ -125,6 +114,8 @@ public static class ContentTypeNames
         public const string Jpeg = "image/jpeg";
 
         public const string Tiff = "image/tiff";
+
+        public const string Ppm = "image/x-portable-pixmap";
     }
 
     public static class Audio
@@ -171,5 +162,4 @@ public static class ContentTypeNames
 
         public const string Xml = "text/xml";
     }
-
 }
