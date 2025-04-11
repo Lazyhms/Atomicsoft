@@ -1,6 +1,6 @@
 ﻿namespace System.Text.Json.Serialization;
 
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
 public sealed class JsonDateTimeOffsetConverterAttribute(string dateFormatString) : JsonConverterAttribute
 {
     public JsonDateTimeOffsetConverterAttribute() : this("yyyy-MM-dd HH:mm:ss")

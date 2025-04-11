@@ -11,13 +11,9 @@ public static class ApiBehaviorServiceExtensions
         {
             options.SuppressModelStateInvalidFilter = false;
             options.InvalidModelStateResponseFactory = context =>
-            {
-                if (invalidModelStateResponse != null)
-                {
-                    return invalidModelStateResponse!.Invoke(context);
-                }
-                return new BadRequestObjectResult(context.ModelState);
-            };
+                 invalidModelStateResponse != null
+                    ? invalidModelStateResponse!.Invoke(context)
+                    : new BadRequestObjectResult(context.ModelState);
         });
         return services;
     }

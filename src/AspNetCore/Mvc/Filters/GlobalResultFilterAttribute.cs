@@ -23,6 +23,10 @@ public sealed class GlobalResultFilterAttribute(IOptionsSnapshot<GlobalObjectRes
                 _globalObjectResult.Value = objectResult.Value;
                 context.Result = new OkObjectResult(_globalObjectResult);
                 break;
+            case EmptyResult emptyResult:
+                _globalObjectResult.Value = null;
+                context.Result = new OkObjectResult(_globalObjectResult);
+                break;
         }
 
         return base.OnResultExecutionAsync(context, next);

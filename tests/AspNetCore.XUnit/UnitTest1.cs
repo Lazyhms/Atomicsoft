@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -45,25 +46,26 @@ public class UnitTest1
     [Fact]
     public void Test3()
     {
-        var ttt11 = ((string?)null).IsNullOrWhiteSpace("≤‚ ‘");
-
-        var t13 = new string('0', 5);
-
         var options = JsonSerializerOptions.Default.ApplyWebDefault();
-
-        var t12 = JsonSerializer.Serialize(Guid.NewGuid(), options);
+        //options.TypeInfoResolver = new MultipleJsonPropertyNameResolver();
 
         var ttt1 = JsonSerializer.Serialize(new Test { Score = 0.00001m }, options);
-
+        var ttt22222 = JsonSerializer.Deserialize<Test>(@"{
+  ""aid"": ""120"",
+  ""pId"": ""0"",
+  ""score"": ""0.00001"",
+  ""name"": """",
+  ""guid"": ""(00000000-0000-0000-0000-000000000000)""
+}", options);
 
         var t1 = Tests.A.GetDescription();
         var t3 = Tests.A.GetDescription();
 
         var t2 = Enum.GetNames<Tests>();
 
-        Test[] t = [new Test { Id = 1, PId = 0, Name = "11" }, new Test { Id = 2, PId = 1, Name = "22" }];
+        Test[] t = [new Test { Id = 1, PId = 0, Name = "11" }, new Test { Id = 2, PId = 1, Name = "22" }, new Test { Id = 3, PId = 1, Name = "33" }, new Test { Id = 4, PId = 3, Name = "22" }];
         var tt = t.ToTreeNode(s => s.Id, p => p.PId).ToList();
-        var ttt2 = tt.FilterNode(f => f.Name == "22").ToList();
+        var ttt2 = tt.FilterNode(f => f.Name == "33").ToList();
 
         var ttt = JsonSerializer.Serialize(tt, options);
     }
@@ -73,22 +75,26 @@ public class UnitTest1
 
 public class Test
 {
+    [JsonPropertyNames("aid", "cId", "did")]
     public int Id { get; set; }
 
     public int PId { get; set; }
 
-    [JsonNumberHandling(JsonNumberHandling.WriteAsString)]
     public decimal Score { get; set; }
 
     public string? Name { get; set; } = null;
 
     [JsonGuidHandling(JsonGuidHandling.Parentheses)]
     public Guid Guid { get; set; }
+
+    public Tests Tests { get; set; } = Tests.A;
 }
 
 
 public enum Tests
 {
+    [Description("wo s A")]
     A,
+
     B, C, D, E, F,
 }

@@ -9,8 +9,8 @@ public static class GloablResultServiceExtenions
     /// </summary>
     public static IServiceCollection ConfigureGlobalResult(this IServiceCollection services)
         => services
-            .ConfigureSuccessResult(options => { options.Code = 0; options.Message = "Success."; })
-            .ConfigureBizException(options => { options.Code = 1; options.Message = "BusinessServerError."; })
+            .ConfigureSuccessResult(options => { options.Code = 1; options.Message = "Success."; })
+            .ConfigureBizException(options => { options.Code = 0; options.Message = "BusinessServerError."; })
             .ConfigureGlobalException(options => { options.Code = 2; options.Message = "InternalServerError."; });
 
     /// <summary>

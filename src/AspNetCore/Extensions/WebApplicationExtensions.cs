@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.CookiePolicy;
+﻿using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Microsoft.AspNetCore.Extensions;
+namespace Microsoft.AspNetCore.Builder;
 
 public static class WebApplicationExtensions
 {
     public static WebApplication ApplyDefault(this WebApplication webApplication)
     {
         webApplication.UseRouting();
-        webApplication.UsePathBase("/test");
+        webApplication.UsePathBase("/");
         webApplication.UseExceptionHandler("/");
 
         webApplication.UseForwardedHeaders(new ForwardedHeadersOptions

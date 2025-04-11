@@ -5,7 +5,6 @@ namespace Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 internal sealed class TableAndColumnCommentConvention : IModelFinalizingConvention
 {
-    private int _defaultColumnOrder = 15;
     private readonly List<XmlDocumentationComments> _xmlDocumentationComments = [];
     private readonly IEntityFrameworkCoreSingletonOptions _entityFrameworkCoreSingletonOptions;
 
@@ -63,11 +62,19 @@ internal sealed class TableAndColumnCommentConvention : IModelFinalizingConventi
 
     private void ProcessColumnOrderModelFinalizing(IConventionEntityType conventionEntityType)
     {
-        foreach (var conventionProperty in conventionEntityType.GetProperties().Where(w => !w.IsShadowProperty()))
+        var defaultColumnOrder = 0;
+        foreach (var conventionProperty in conventionEntityType.GetProperties().OrderBy(o => o.GetColumnOrder()))
         {
             if (!conventionProperty.GetColumnOrder().HasValue)
             {
-                conventionProperty.SetColumnOrder(_defaultColumnOrder++, fromDataAnnotation: true);
+                if (!conventionEntityType.IsOwned())
+                {
+                    conventionProperty.SetColumnOrder(defaultColumnOrder++, true);
+                }
+                else if (!conventionProperty.IsShadowProperty())
+                {
+                    conventionProperty.SetColumnOrder(90 + defaultColumnOrder++, true);
+                }
             }
         }
     }
@@ -77,9 +84,9 @@ internal sealed class TableAndColumnCommentConvention : IModelFinalizingConventi
         var xmlCommentsDocument = _xmlDocumentationComments.Find(xmlCommentsDocument => xmlCommentsDocument.FindAssemblyXPathNavigatoryForType(conventionEntityType.ClrType) is not null);
         if (xmlCommentsDocument is not null)
         {
-            if (string.IsNullOrWhiteSpace(conventionEntityType.GetComment()))
+            if (!conventionEntityType.IsOwned() && string.IsNullOrWhiteSpace(conventionEntityType.GetComment()))
             {
-                conventionEntityType.SetComment(xmlCommentsDocument.GetMemberNameForType(conventionEntityType.ClrType), fromDataAnnotation: true);
+                conventionEntityType.SetComment(xmlCommentsDocument.GetMemberNameForType(conventionEntityType.ClrType), true);
             }
 
             foreach (var conventionProperty in conventionEntityType.GetProperties())

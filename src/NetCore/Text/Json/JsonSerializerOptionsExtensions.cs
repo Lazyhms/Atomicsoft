@@ -22,7 +22,7 @@ public static class JsonSerializerOptionsExtensions
         serializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         serializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         serializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-        serializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+        serializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString;
 
         serializerOptions.Converters.Add(new DataSetConverter());
         serializerOptions.Converters.Add(new JsonGuidConverter());
@@ -33,8 +33,8 @@ public static class JsonSerializerOptionsExtensions
         serializerOptions.Converters.Add(new JsonDateTimeOffsetConverter());
 
         serializerOptions.TypeInfoResolver = serializerOptions.TypeInfoResolver?
-            .WithAddedModifier(JsonPropertyResolver.AddEnumModifier)
-            .WithAddedModifier(JsonPropertyResolver.AddIntegerModifier);
+            .WithAddedModifier(Serialization.JsonTypeInfoResolver.AddEnumModifier)
+            .WithAddedModifier(Serialization.JsonTypeInfoResolver.JsonPropertyModifier);
 
         return serializerOptions;
     }
