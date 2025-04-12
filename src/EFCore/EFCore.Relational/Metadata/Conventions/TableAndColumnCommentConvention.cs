@@ -62,18 +62,23 @@ internal sealed class TableAndColumnCommentConvention : IModelFinalizingConventi
 
     private void ProcessColumnOrderModelFinalizing(IConventionEntityType conventionEntityType)
     {
-        var defaultColumnOrder = 0;
+        var index = 0;
         foreach (var conventionProperty in conventionEntityType.GetProperties().OrderBy(o => o.GetColumnOrder()))
         {
-            if (!conventionProperty.GetColumnOrder().HasValue)
+            if (!conventionEntityType.IsOwned())
             {
-                if (!conventionEntityType.IsOwned())
+                if (!conventionProperty.GetColumnOrder().HasValue && !conventionProperty.IsShadowProperty())
                 {
-                    conventionProperty.SetColumnOrder(defaultColumnOrder++, true);
+                    conventionProperty.SetColumnOrder(index++, true);
                 }
-                else if (!conventionProperty.IsShadowProperty())
+            }
+            else
+            {
+                var conventionNavigations = conventionEntityType.FindOwnership()?.PrincipalEntityType.GetNavigations().Where(w => w.TargetEntityType.IsOwned()) ?? [];
+                var conventionIndex = conventionNavigations.Select((x, index) => x.TargetEntityType == conventionEntityType ? index : -1).Where(w => w != -1).DefaultIfEmpty(-1).First();
+                if (conventionIndex >= 0 && !conventionProperty.GetColumnOrder().HasValue && !conventionProperty.IsShadowProperty())
                 {
-                    conventionProperty.SetColumnOrder(90 + defaultColumnOrder++, true);
+                    conventionProperty.SetColumnOrder(50 + (conventionIndex * 10) + index++, true);
                 }
             }
         }
