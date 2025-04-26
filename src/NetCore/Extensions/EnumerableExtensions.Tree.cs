@@ -32,6 +32,9 @@ public static partial class EnumerableExtensions
         return dic.Values.Where(w => Equals(rootValue, relationKeySelector(w.Source)));
     }
 
+    public static IEnumerable<TreeNode<TSource>> FilterNode<TSource>(this IEnumerable<TreeNode<TSource>> source, bool condition, Func<TSource, bool> predicate)
+        => condition ? source.FilterNode(predicate) : source;
+
     public static IEnumerable<TreeNode<TSource>> FilterNode<TSource>(this IEnumerable<TreeNode<TSource>> source, Func<TSource, bool> predicate)
     {
         foreach (var item in source)
