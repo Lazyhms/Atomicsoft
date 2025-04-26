@@ -2,9 +2,9 @@
 
 namespace Microsoft.AspNetCore.Mvc.Filters;
 
-public sealed class GlobalResultFilterAttribute(IOptionsSnapshot<GlobalObjectResult> options) : ResultFilterAttribute
+public sealed class GlobalResultFilterAttribute(IOptions<GlobalObjectResult> options) : ResultFilterAttribute
 {
-    private readonly GlobalObjectResult _globalObjectResult = options.Get("Global_Object");
+    private readonly GlobalObjectResult _globalObjectResult = options.Value;
 
     public override Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {

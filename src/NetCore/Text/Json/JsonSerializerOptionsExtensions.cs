@@ -22,7 +22,7 @@ public static class JsonSerializerOptionsExtensions
         serializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
         serializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         serializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-        serializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString;
+        serializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
 
         serializerOptions.Converters.Add(new DataSetConverter());
         serializerOptions.Converters.Add(new JsonGuidConverter());

@@ -9,29 +9,27 @@ namespace Microsoft.AspNetCore.Diagnostics;
 
 public sealed class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,
-    IOptionsSnapshot<ExceptionResult> options,
+    IOptions<ExceptionResult> exceptionResult,
     IWebHostEnvironment webHostEnvironment) : IExceptionHandler
 {
-    private readonly ExceptionResult _bizResult = options.Get("Biz_Exception");
-
-    private readonly ExceptionResult _globalResult = options.Get("Global_Exception");
+    private readonly ExceptionResult _globalExceptionResult = exceptionResult.Value;
 
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
         switch (exception)
         {
             case BizException bizException:
-                logger.LogError(bizException, "Title:业务异常 HResult:{HResult}", bizException.HResult);
+                logger.LogError(bizException, "Title:BizException HResult:{HResult}", bizException.HResult);
 
-                _bizResult.Message = bizException.Message;
-                await context.Response.WriteAsJsonAsync(_bizResult, cancellationToken);
+                _globalExceptionResult.Message = bizException.Message;
+                await context.Response.WriteAsJsonAsync(_globalExceptionResult, cancellationToken);
                 return await ValueTask.FromResult(true);
             case Exception handledException:
-                logger.LogError(handledException, "Title:系统异常 HResult:{HResult}", handledException.HResult);
+                logger.LogError(handledException, "Title:Exception HResult:{HResult}", handledException.HResult);
 
-                _globalResult.Message = webHostEnvironment.IsDevelopment()
+                _globalExceptionResult.Message = webHostEnvironment.IsDevelopment()
                     ? handledException.ToString() : "服务器发生错误,请联系管理员";
-                await context.Response.WriteAsJsonAsync(_globalResult, cancellationToken);
+                await context.Response.WriteAsJsonAsync(_globalExceptionResult, cancellationToken);
                 return await ValueTask.FromResult(true);
         }
         return await ValueTask.FromResult(false);
