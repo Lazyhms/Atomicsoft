@@ -39,13 +39,8 @@ public static partial class EnumerableExtensions
     {
         foreach (var item in source)
         {
-            if (0 != item.Children.Count)
-            {
-                FilterNode(item.Children, predicate);
-            }
-            item.Children = item.Children.Where(w => predicate(w.Source) || 0 != w.Children.Count).ToList() ?? [];
+            item.Children = [.. item.Children.FilterNode(predicate)];
         }
-
         return source.Where(w => predicate(w.Source) || 0 != w.Children.Count);
     }
 }
