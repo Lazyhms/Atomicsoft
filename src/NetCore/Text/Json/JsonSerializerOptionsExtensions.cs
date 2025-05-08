@@ -30,6 +30,7 @@ public static class JsonSerializerOptionsExtensions
         serializerOptions.Converters.Add(new JsonStringConverter());
         serializerOptions.Converters.Add(new JsonDateOnlyConverter());
         serializerOptions.Converters.Add(new JsonDateTimeConverter());
+        serializerOptions.Converters.Add(new NullableConverterFactory());
         serializerOptions.Converters.Add(new JsonDateTimeOffsetConverter());
 
         serializerOptions.TypeInfoResolver = serializerOptions.TypeInfoResolver?

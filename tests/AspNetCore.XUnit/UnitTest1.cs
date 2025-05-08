@@ -14,6 +14,17 @@ public class UnitTest1
     [Fact]
     public void Test1()
     {
+
+
+
+        var jsonArray = JsonSerializer.SerializeToNode(new object[] { new { id = 1, name = "2" }, new { id = 2, name = "3" } });
+
+        var tttt = jsonArray!.AsArray().OfType<JsonObject>().Select(s => s.GetPropertyValue<string>("name"));
+
+        var jsonObject = JsonSerializer.SerializeToNode(new { Id = 1, Name = "222" })!.AsObject();
+        jsonObject.AddOrUpdate("name", "333");
+        jsonObject.TryUpdate("ddd", "122");
+
         Expression<Func<Test, bool>> expression = t => true;
         Expression<Func<Test, bool>> expression1 = t => false;
         var expression2 = expression.And(x => x.Id == 1);
@@ -49,6 +60,8 @@ public class UnitTest1
         var options = JsonSerializerOptions.Default.ApplyWebDefault();
         //options.TypeInfoResolver = new MultipleJsonPropertyNameResolver();
 
+        var i1 = JsonSerializer.Deserialize<Tes>(@"{""Date"":""""}", options);
+
         var ttt1 = JsonSerializer.Serialize(new Test { Score = 0.00001m }, options);
         var ttt22222 = JsonSerializer.Deserialize<Test>(@"{
   ""aid"": ""120"",
@@ -65,12 +78,17 @@ public class UnitTest1
 
         Test[] t = [new Test { Id = 1, PId = 0, Name = "11" }, new Test { Id = 2, PId = 1, Name = "22" }, new Test { Id = 3, PId = 1, Name = "33" }, new Test { Id = 4, PId = 3, Name = "22" }];
         var tt = t.ToTreeNode(s => s.Id, p => p.PId).ToList();
-        var ttt2 = tt.FilterNode(f => f.Name == "33").ToList();
+        var ttt2 = t.ToTreeNode(s => s.Id, p => p.PId).FilterNode(f => f.Name == "33").ToList();
 
         var ttt = JsonSerializer.Serialize(tt, options);
     }
+}
 
+public class Tes
+{
+    public int? Id { get; set; }
 
+    public DateTime? Date { get; set; }
 }
 
 public class Test

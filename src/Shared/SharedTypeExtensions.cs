@@ -1,6 +1,6 @@
 ﻿global using System.Diagnostics;
 global using System.Diagnostics.CodeAnalysis;
-
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace System;
@@ -11,11 +11,16 @@ internal static class SharedTypeExtensions
     public static Type UnwrapNullableType(this Type type)
         => Nullable.GetUnderlyingType(type) ?? type;
 
-    public static bool IsNullableValueType(this Type type)
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static bool IsNullableOfT(this Type type)
         => type.IsConstructedGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
+    public static bool IsNullableValueType(this Type type)
+        => type.IsValueType && type.IsNullableOfT();
+
     public static bool IsNullableType(this Type type)
-        => !type.IsValueType || type.IsNullableValueType();
+        => !type.IsValueType || type.IsNullableOfT();
 
     public static bool IsNumeric(this Type type)
     {
