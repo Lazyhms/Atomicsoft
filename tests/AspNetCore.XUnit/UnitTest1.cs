@@ -55,6 +55,14 @@ public class UnitTest1
     }
 
     [Fact]
+    public void Test2()
+    {
+        var tt = typeof(Test2);
+
+        var d = tt.GetProperty("Id");
+    }
+
+    [Fact]
     public void Test3()
     {
         var options = JsonSerializerOptions.Default.ApplyWebDefault();
@@ -82,6 +90,14 @@ public class UnitTest1
 
         var ttt = JsonSerializer.Serialize(tt, options);
     }
+}
+
+public class Test2
+{
+    public int Id { get; }
+
+
+    public int RId => Id;
 }
 
 public class Tes

@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swashbuckle", "src\Swashbuckle\Swashbuckle.csproj", "{1D44317E-CA99-490A-B5DA-98E886E78A12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{2462710B-B1F9-4135-BB03-8DF553037D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2462710B-B1F9-4135-BB03-8DF553037D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2462710B-B1F9-4135-BB03-8DF553037D18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D44317E-CA99-490A-B5DA-98E886E78A12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D44317E-CA99-490A-B5DA-98E886E78A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D44317E-CA99-490A-B5DA-98E886E78A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D44317E-CA99-490A-B5DA-98E886E78A12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{DDD631AC-41BB-4E40-BE4C-E011FC4EDF01} = {31CC8379-CC00-4498-A9F1-44DE8A93DA90}
 		{C23516AD-C15C-4073-9208-7E8037C10064} = {917FFDFC-A0E1-4768-ACCA-3CF684303C2C}
 		{2462710B-B1F9-4135-BB03-8DF553037D18} = {917FFDFC-A0E1-4768-ACCA-3CF684303C2C}
+		{1D44317E-CA99-490A-B5DA-98E886E78A12} = {3ABE4188-EA4E-4B48-9A90-B9DD61391BC8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF47175E-C01E-4017-AE6A-27A1EE271643}
