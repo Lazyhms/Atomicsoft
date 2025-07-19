@@ -11,7 +11,7 @@ public static partial class DateTimeExtensions
     public static DateTime EndOfDay(this DateTime date) =>
         DateTime.SpecifyKind(date.Date.AddDays(1).AddTicks(-1), date.Kind);
 
-    public static (DateTime Start, DateTime End) GetDailyRange(this DateTime date) =>
+    public static (DateTime Start, DateTime End) DailyRange(this DateTime date) =>
         (date.StartOfDay(), date.EndOfDay());
 
     public static DateTime StartOfMonth(this DateTime date) =>
@@ -20,22 +20,22 @@ public static partial class DateTimeExtensions
     public static DateTime EndOfMonth(this DateTime date) =>
         DateTime.SpecifyKind(new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).AddDays(1).AddTicks(-1), date.Kind);
 
-    public static (DateTime Start, DateTime End) GetMonthlyRange(this DateTime date) =>
+    public static (DateTime Start, DateTime End) MonthlyRange(this DateTime date) =>
         (date.StartOfMonth(), date.EndOfMonth());
 
-    public static int GetQuarter(this DateTime date) =>
+    public static int Quarter(this DateTime date) =>
         (date.Month - 1) / 3 + 1;
 
     public static DateTime StartOfQuarter(this DateTime date)
     {
-        var quarter = date.GetQuarter();
+        var quarter = date.Quarter();
         var startMonth = (quarter - 1) * 3 + 1;
         return DateTime.SpecifyKind(new DateTime(date.Year, startMonth, 1), date.Kind);
     }
 
     public static DateTime EndOfQuarter(this DateTime date)
     {
-        var quarter = date.GetQuarter();
+        var quarter = date.Quarter();
         var endMonth = quarter * 3;
         var daysInMonth = DateTime.DaysInMonth(date.Year, endMonth);
 
@@ -44,7 +44,7 @@ public static partial class DateTimeExtensions
         return DateTime.SpecifyKind(end, date.Kind);
     }
 
-    public static (DateTime Start, DateTime End) GetQuarterlyRange(this DateTime date) =>
+    public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime date) =>
         (date.StartOfQuarter(), date.EndOfQuarter());
 
     public static DateTime StartOfYear(this DateTime date) =>
@@ -56,7 +56,7 @@ public static partial class DateTimeExtensions
         return DateTime.SpecifyKind(end, date.Kind);
     }
 
-    public static (DateTime Start, DateTime End) GetYearlyRange(this DateTime date) =>
+    public static (DateTime Start, DateTime End) YearlyRange(this DateTime date) =>
         (date.StartOfYear(), date.EndOfYear());
 
     public static async Task WaitForNextMinuteAsync(CancellationToken stoppingToken = default)
