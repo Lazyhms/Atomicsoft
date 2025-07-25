@@ -8,11 +8,13 @@ public class QueryFilterQueryTranslationPreprocessor(
 {
     public override Expression Process(Expression query)
     {
+        query = innerQueryTranslationPreprocessor.Process(query);
+
         query = new QueryFilterExpressionVisitor(
-            QueryCompilationContext, 
+            QueryCompilationContext,
             Dependencies.EvaluatableExpressionFilter)
                 .ApplyStoredQueryFilter(query);
 
-        return innerQueryTranslationPreprocessor.Process(query);
+        return query;
     }
 }

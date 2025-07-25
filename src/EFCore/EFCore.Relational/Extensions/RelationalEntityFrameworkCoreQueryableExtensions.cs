@@ -6,28 +6,28 @@ public static class RelationalEntityFrameworkCoreQueryableExtensions
 {
     private static readonly EntityQueryRootExpressionVisitor _entityQueryRootExpressionVisitor = new();
 
-    internal static readonly MethodInfo StringIgnoreQueryFiltersMethodInfo
+    internal static readonly MethodInfo IgnoreNamedQueryFiltersMethodInfo
         = typeof(RelationalEntityFrameworkCoreQueryableExtensions)
             .GetTypeInfo().GetDeclaredMethods(nameof(IgnoreQueryFilters))
             .Single(
                 mi => mi.GetParameters().Any(
-                    pi => pi.Name == "filters" && pi.ParameterType == typeof(IEnumerable<string>)));
+                    pi => pi.Name == "filterKeys" && pi.ParameterType == typeof(IEnumerable<string>)));
 
     public static IQueryable<TEntity> IgnoreQueryFilters<TEntity>(
         this IQueryable<TEntity> source,
-        [NotParameterized] params string[] filters) where TEntity : class
-        => source.IgnoreQueryFilters((IEnumerable<string>)filters);
+        [NotParameterized] params string[] filterKeys) where TEntity : class
+        => source.IgnoreQueryFilters((IEnumerable<string>)filterKeys);
 
     public static IQueryable<TEntity> IgnoreQueryFilters<TEntity>(
         this IQueryable<TEntity> source,
-        [NotParameterized] IEnumerable<string> filters) where TEntity : class
+        [NotParameterized] IEnumerable<string> filterKeys) where TEntity : class
         => source.Provider is EntityQueryProvider
             ? source.Provider.CreateQuery<TEntity>(
                 Expression.Call(
                     instance: null,
-                    method: StringIgnoreQueryFiltersMethodInfo.MakeGenericMethod(typeof(TEntity)),
+                    method: IgnoreNamedQueryFiltersMethodInfo.MakeGenericMethod(typeof(TEntity)),
                     arg0: source.Expression,
-                    arg1: Expression.Constant(filters)))
+                    arg1: Expression.Constant(filterKeys)))
             : source;
 
     public static IQueryable<TEntity> IgnoreQueryFilters<TEntity, TProperty>(
@@ -120,8 +120,21 @@ public static class RelationalEntityFrameworkCoreQueryableExtensions
 
     private sealed class EntityQueryRootExpressionVisitor : ExpressionVisitor
     {
-        protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
-            => methodCallExpression.Arguments[0].NodeType != ExpressionType.Extension
-                ? Visit(methodCallExpression.Arguments[0]) : methodCallExpression.Arguments[0];
+        [return: NotNullIfNotNull(nameof(node))]
+        public override Expression? Visit(Expression? node) =>
+            node is EntityQueryRootExpression ? node : base.Visit(node);
+
+        protected override Expression VisitMethodCall(MethodCallExpression node)
+        {
+            if (node.Arguments.Count > 0)
+            {
+                var source = Visit(node.Arguments[0]);
+                if (source is EntityQueryRootExpression)
+                {
+                    return source;
+                }
+            }
+            return base.VisitMethodCall(node);
+        }
     }
 }

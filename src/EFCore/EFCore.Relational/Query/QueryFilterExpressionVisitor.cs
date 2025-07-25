@@ -4,7 +4,6 @@ namespace Microsoft.EntityFrameworkCore.Query;
 
 public class QueryFilterExpressionVisitor : ExpressionVisitor
 {
-    private bool _ignoredQueryFilter = false;
     private readonly Parameters _parameters = new();
     private readonly IList<string> _ignoredQueryFilterNames = [];
     private readonly Dictionary<IEntityType, Dictionary<object, LambdaExpression>> _parameterizedQueryFilterPredicateCache = [];
@@ -64,14 +63,12 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
 
     protected override Expression VisitMethodCall(MethodCallExpression methodCallExpression)
     {
-        var genericMethodDefinition = methodCallExpression.Method.GetGenericMethodDefinition();
-
-        if (genericMethodDefinition == _ignoreQueryFiltersMethodInfo)
+        if (_queryCompilationContext.IgnoreQueryFilters)
         {
-            _ignoredQueryFilter = true;
             return base.VisitMethodCall(methodCallExpression);
         }
-        if (genericMethodDefinition == RelationalEntityFrameworkCoreQueryableExtensions.StringIgnoreQueryFiltersMethodInfo)
+        var genericMethodDefinition = methodCallExpression.Method.GetGenericMethodDefinition();
+        if (genericMethodDefinition == RelationalEntityFrameworkCoreQueryableExtensions.IgnoreNamedQueryFiltersMethodInfo)
         {
             foreach (var item in (IEnumerable<string>)((ConstantExpression)methodCallExpression.Arguments[1]).Value!)
             {
@@ -93,7 +90,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
             Expression queryRootExpression = entityQueryRootExpression;
             foreach (var queryFilter in storedQueryFilter)
             {
-                if (_ignoredQueryFilter ||
+                if (_queryCompilationContext.IgnoreQueryFilters ||
                     _ignoredQueryFilterNames.Contains(queryFilter.Key))
                 {
                     continue;
@@ -110,7 +107,6 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
 #elif NET9_0
                     filterPredicate = (LambdaExpression)_expressionTreeFuncletizer.ExtractParameters(queryFilter.Value, _parameters, false, false);
 #endif
-
                     storedFilterPredicate[queryFilter.Key] = filterPredicate;
                 }
 
