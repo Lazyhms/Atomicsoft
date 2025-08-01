@@ -6,6 +6,6 @@ internal sealed class ColumnDefaultValueSqlConvention(ProviderConventionSetBuild
         IConventionPropertyBuilder propertyBuilder,
         DefaultValueSqlAttribute attribute,
         MemberInfo clrMember,
-        IConventionContext context) 
+        IConventionContext context)
         => propertyBuilder.HasDefaultValueSql(attribute.Value, fromDataAnnotation: true);
 }
