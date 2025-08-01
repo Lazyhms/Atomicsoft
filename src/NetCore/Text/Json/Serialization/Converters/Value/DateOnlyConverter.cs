@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 
-namespace System.Text.Json.Serialization;
+namespace System.Text.Json.Serialization.Converters.Value;
 
-public sealed class JsonDateOnlyConverter(string dateFormatString) : JsonConverter<DateOnly>
+public sealed class DateOnlyConverter(string dateFormatString) : JsonConverter<DateOnly>
 {
     private readonly JsonConverter<DateOnly> s_defaultConverter =
         (JsonConverter<DateOnly>)JsonSerializerOptions.Default.GetConverter(typeof(DateOnly));
 
-    public JsonDateOnlyConverter() : this("yyyy-MM-dd")
+    public DateOnlyConverter() : this("yyyy-MM-dd")
     {
     }
 

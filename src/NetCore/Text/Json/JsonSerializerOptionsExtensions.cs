@@ -24,14 +24,16 @@ public static class JsonSerializerOptionsExtensions
         serializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
         serializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
 
-        serializerOptions.Converters.Add(new DataSetConverter());
-        serializerOptions.Converters.Add(new JsonGuidConverter());
-        serializerOptions.Converters.Add(new DataTableConverter());
-        serializerOptions.Converters.Add(new JsonStringConverter());
-        serializerOptions.Converters.Add(new JsonDateOnlyConverter());
-        serializerOptions.Converters.Add(new JsonDateTimeConverter());
         serializerOptions.Converters.Add(new NullableConverterFactory());
-        serializerOptions.Converters.Add(new JsonDateTimeOffsetConverter());
+
+        serializerOptions.Converters.Add(new Serialization.Converters.Object.DataSetConverter());
+        serializerOptions.Converters.Add(new Serialization.Converters.Object.DataTableConverter());
+
+        serializerOptions.Converters.Add(new Serialization.Converters.Value.GuidConverter());
+        serializerOptions.Converters.Add(new Serialization.Converters.Value.StringConverter());
+        serializerOptions.Converters.Add(new Serialization.Converters.Value.DateOnlyConverter());
+        serializerOptions.Converters.Add(new Serialization.Converters.Value.DateTimeConverter());
+        serializerOptions.Converters.Add(new Serialization.Converters.Value.DateTimeOffsetConverter());
 
         serializerOptions.TypeInfoResolver = serializerOptions.TypeInfoResolver?
             .WithAddedModifier(Serialization.JsonTypeInfoResolver.AddEnumModifier)

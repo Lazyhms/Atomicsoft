@@ -1,11 +1,11 @@
-﻿namespace System.Text.Json.Serialization;
+﻿namespace System.Text.Json.Serialization.Converters.Value;
 
-public sealed class JsonGuidConverter(JsonGuidHandling? jsonGuidHandling) : JsonConverter<Guid>
+public sealed class GuidConverter(JsonGuidHandling? jsonGuidHandling) : JsonConverter<Guid>
 {
     private readonly JsonConverter<Guid> s_defaultConverter =
         (JsonConverter<Guid>)JsonSerializerOptions.Default.GetConverter(typeof(Guid));
 
-    public JsonGuidConverter() : this(null)
+    public GuidConverter() : this(null)
     {
     }
 

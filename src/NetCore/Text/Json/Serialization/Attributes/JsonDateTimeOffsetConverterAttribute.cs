@@ -8,5 +8,5 @@ public sealed class JsonDateTimeOffsetConverterAttribute(string dateFormatString
     }
 
     public override JsonConverter? CreateConverter(Type typeToConvert)
-        => new JsonDateTimeOffsetConverter(dateFormatString);
+        => new Converters.Value.DateTimeOffsetConverter(dateFormatString);
 }

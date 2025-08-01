@@ -9,7 +9,10 @@ public static class JsonNodeExtensions
     }
 
     public static JsonNode? GetPropertyValue(this JsonObject jsonObject, string propertyName)
-        => jsonObject.FirstOrDefault(fod => fod.Key.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).Value;
+        => jsonObject.GetPropertyValue(propertyName, StringComparison.OrdinalIgnoreCase);
+
+    public static JsonNode? GetPropertyValue(this JsonObject jsonObject, string propertyName, StringComparison stringComparison)
+        => jsonObject.FirstOrDefault(fod => fod.Key.Equals(propertyName, stringComparison)).Value;
 
     public static JsonObject TryUpdate(this JsonObject jsonObject, string propertyName, JsonNode? value)
     {

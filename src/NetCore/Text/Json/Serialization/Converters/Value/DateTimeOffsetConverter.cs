@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 
-namespace System.Text.Json.Serialization;
+namespace System.Text.Json.Serialization.Converters.Value;
 
-public sealed class JsonDateTimeOffsetConverter(string dateFormatString) : JsonConverter<DateTimeOffset>
+public sealed class DateTimeOffsetConverter(string dateFormatString) : JsonConverter<DateTimeOffset>
 {
     private readonly JsonConverter<DateTimeOffset> s_defaultConverter =
         (JsonConverter<DateTimeOffset>)JsonSerializerOptions.Default.GetConverter(typeof(DateTimeOffset));
 
-    public JsonDateTimeOffsetConverter() : this("yyyy-MM-dd HH:mm:ss")
+    public DateTimeOffsetConverter() : this("yyyy-MM-dd HH:mm:ss")
     {
     }
 

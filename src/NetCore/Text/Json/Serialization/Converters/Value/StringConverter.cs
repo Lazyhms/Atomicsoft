@@ -1,6 +1,6 @@
-﻿namespace System.Text.Json.Serialization;
+﻿namespace System.Text.Json.Serialization.Converters.Value;
 
-public sealed class JsonStringConverter : JsonConverter<string>
+public sealed class StringConverter : JsonConverter<string>
 {
     private readonly JsonConverter<string> s_defaultConverter =
         (JsonConverter<string>)JsonSerializerOptions.Default.GetConverter(typeof(string));

@@ -8,5 +8,5 @@ public sealed class JsonDateOnlyConverterAttribute(string dateFormatString) : Js
     }
 
     public override JsonConverter? CreateConverter(Type typeToConvert)
-        => new JsonDateOnlyConverter(dateFormatString);
+        => new Converters.Value.DateOnlyConverter(dateFormatString);
 }
