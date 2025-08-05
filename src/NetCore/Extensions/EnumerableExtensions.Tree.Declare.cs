@@ -11,6 +11,7 @@ public class TreeNode<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes
         {
             Add(item.Name, item.GetValue(source));
         }
+
         Add("Children", new List<TreeNode<TSource>>());
     }
 

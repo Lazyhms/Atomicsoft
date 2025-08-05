@@ -33,6 +33,7 @@ public static class JsonNodeExtensions
                 jsonObject.Add(propertyName, value);
                 break;
         }
+
         return jsonObject;
     }
 }

@@ -25,6 +25,7 @@ public static class EntityEntryExtensions
         {
             item.IsModified = false;
         }
+
         return entityEntry;
     }
 
@@ -40,6 +41,7 @@ public static class EntityEntryExtensions
         {
             entityEntry.Property(item).IsModified = false;
         }
+
         return entityEntry;
     }
 

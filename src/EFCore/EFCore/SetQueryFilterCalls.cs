@@ -21,6 +21,7 @@ public class SetQueryFilterCalls
             {
                 Filters.Add(leftMemberExpression.Member.Name, propertyExpression);
             }
+
             if (binaryExpression.Right is MemberExpression rightMemberExpression)
             {
                 Filters.Add(rightMemberExpression.Member.Name, propertyExpression);
@@ -35,6 +36,7 @@ public class SetQueryFilterCalls
                     Filters.Add(leftMemberExpression.Member.Name, propertyExpression);
                 }
             }
+
             if (methodCallExpression.Arguments[1] is MemberExpression rightMemberExpression)
             {
                 if (propertyExpression.Parameters[0] == rightMemberExpression.Expression)
@@ -43,6 +45,7 @@ public class SetQueryFilterCalls
                 }
             }
         }
+
         return this;
     }
 }

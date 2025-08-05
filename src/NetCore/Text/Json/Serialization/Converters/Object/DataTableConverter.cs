@@ -20,6 +20,7 @@ public sealed class DataTableConverter : JsonConverter<DataTable>
                     options.PropertyNamingPolicy?.ConvertName(column.ColumnName) ?? column.ColumnName);
                 JsonSerializer.Serialize(writer, row[column], options);
             }
+
             writer.WriteEndObject();
         }
 

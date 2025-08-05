@@ -120,6 +120,7 @@ public class EntityFrameworkCoreDbContextOptionsExtension : IDbContextOptionsExt
                 hashCode.Add(Extension._enableForeignKeyIndex);
                 _serviceProviderHash = hashCode.ToHashCode();
             }
+
             return _serviceProviderHash.Value;
         }
 

@@ -11,6 +11,7 @@ public class MigrationsSqlGenerator<TMigrationsSqlGenerator>(
         {
             item.ForeignKeys.Clear();
         }
+
         return migrationsSqlGenerator.Generate(operations, model, options);
     }
 }

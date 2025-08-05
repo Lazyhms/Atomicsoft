@@ -134,6 +134,7 @@ public static class RelationalEntityFrameworkCoreQueryableExtensions
                     return source;
                 }
             }
+
             return base.VisitMethodCall(node);
         }
     }

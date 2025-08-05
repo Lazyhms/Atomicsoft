@@ -8,6 +8,7 @@ public static partial class EnumerableExtensions
         foreach (var element in source)
         {
             checked { i++; }
+
             yield return i == index ? present : element;
         }
     }

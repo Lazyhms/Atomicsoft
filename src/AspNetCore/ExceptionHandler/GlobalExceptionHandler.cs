@@ -32,6 +32,7 @@ public sealed class GlobalExceptionHandler(
                 await context.Response.WriteAsJsonAsync(_globalExceptionResult, cancellationToken);
                 return await ValueTask.FromResult(true);
         }
+
         return await ValueTask.FromResult(false);
     }
 }

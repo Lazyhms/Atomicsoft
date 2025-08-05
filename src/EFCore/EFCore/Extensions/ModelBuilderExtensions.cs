@@ -21,6 +21,7 @@ public static class ModelBuilderExtensions
         {
             assemblyTypes = assemblyTypes.Where(predicate);
         }
+
         return builder.ApplyEntitiesFromAssembly(assemblyTypes, baseQueryFilters);
     }
 
@@ -54,6 +55,7 @@ public static class ModelBuilderExtensions
                 mutableProperty.SetScale(2);
             }
         }
+
         return builder;
     }
 }

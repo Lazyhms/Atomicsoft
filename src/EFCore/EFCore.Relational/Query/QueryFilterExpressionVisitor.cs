@@ -67,6 +67,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
         {
             return base.VisitMethodCall(methodCallExpression);
         }
+
         var genericMethodDefinition = methodCallExpression.Method.GetGenericMethodDefinition();
         if (genericMethodDefinition == RelationalEntityFrameworkCoreQueryableExtensions.IgnoreNamedQueryFiltersMethodInfo)
         {
@@ -74,6 +75,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
             {
                 _ignoredQueryFilterNames.Add(item);
             }
+
             return base.Visit(methodCallExpression.Arguments[0]);
         }
 
@@ -100,6 +102,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
                 {
                     _parameterizedQueryFilterPredicateCache[rootEntityType] = storedFilterPredicate ??= [];
                 }
+
                 if (!storedFilterPredicate.TryGetValue(queryFilter.Key, out var filterPredicate))
                 {
 #if NET8_0
@@ -115,6 +118,7 @@ public class QueryFilterExpressionVisitor : ExpressionVisitor
                     arg0: queryRootExpression ?? entityQueryRootExpression,
                     arg1: filterPredicate);
             }
+
             return queryRootExpression;
         }
 

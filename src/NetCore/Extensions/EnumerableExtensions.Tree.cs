@@ -41,6 +41,7 @@ public static partial class EnumerableExtensions
         {
             item.Children = [.. item.Children.FilterNode(predicate)];
         }
+
         return source.Where(w => predicate(w.Source) || 0 != w.Children.Count);
     }
 }
