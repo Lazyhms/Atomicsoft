@@ -32,9 +32,9 @@ public static partial class EnumerableExtensions
 
     public static IEnumerable<TSource> Insert<TSource>(this IEnumerable<TSource> source, int index, TSource item)
     {
-        using IEnumerator<TSource> e = source.GetEnumerator();
+        using var e = source.GetEnumerator();
 
-        int tempIndex = -1;
+        var tempIndex = -1;
         while (e.MoveNext())
         {
             checked { tempIndex++; }
@@ -50,16 +50,16 @@ public static partial class EnumerableExtensions
 
     public static IEnumerable<TSource> Insert<TSource>(this IEnumerable<TSource> source, int index, IEnumerable<TSource> items)
     {
-        using IEnumerator<TSource> e = source.GetEnumerator();
+        using var e = source.GetEnumerator();
 
-        int tempIndex = -1;
+        var tempIndex = -1;
         while (e.MoveNext())
         {
             checked { tempIndex++; }
 
             if (tempIndex == index)
             {
-                using IEnumerator<TSource> e1 = items.GetEnumerator();
+                using var e1 = items.GetEnumerator();
                 while (e1.MoveNext())
                 {
                     yield return e1.Current;
@@ -76,11 +76,6 @@ public static partial class EnumerableExtensions
         Func<TOuter, TKey> outerKeySelector,
         Func<TInner, TKey> innerKeySelector,
         Func<TOuter, TInner?, TResult> resultSelector)
-    {
-        return outer.GroupJoin(inner, outerKeySelector, innerKeySelector, (outer, inner) => new
-        {
-            outer,
-            inner
-        }).SelectMany(sm => sm.inner.DefaultIfEmpty(), (r1, r2) => resultSelector(r1.outer, r2));
-    }
+        => outer.GroupJoin(inner, outerKeySelector, innerKeySelector, (outer, inner) => new { outer, inner })
+            .SelectMany(sm => sm.inner.DefaultIfEmpty(), (r1, r2) => resultSelector(r1.outer, r2));
 }

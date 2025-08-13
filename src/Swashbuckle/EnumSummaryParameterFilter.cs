@@ -30,8 +30,8 @@ internal sealed class EnumSummaryParameterFilter : IParameterFilter, IParameterA
                 var attribute = field!.GetCustomAttribute<DescriptionAttribute>();
                 description.Append($"<br/> {(int)value} : {attribute?.Description ?? name}");
             }
+
             parameter.Description = description.ToString();
         }
     }
-
 }

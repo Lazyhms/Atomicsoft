@@ -19,5 +19,11 @@
 
         public static string Join(this object?[] values, string? separator)
             => string.Join(separator, values);
+
+        public static string Join(this object?[] values, char separator, int startIndex, int count)
+            => string.Join(separator, values, startIndex, count);
+
+        public static string Join(this object?[] values, string? separator, int startIndex, int count)
+            => string.Join(separator, values, startIndex, count);
     }
 }

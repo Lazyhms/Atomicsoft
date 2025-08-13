@@ -20,6 +20,7 @@ internal sealed class EnumSummarySchemaFilter : ISchemaFilter
                 var attribute = field!.GetCustomAttribute<DescriptionAttribute>();
                 description.Append($"<br/> {(int)value} : {attribute?.Description ?? name}");
             }
+
             schema.Description = description.ToString();
         }
     }

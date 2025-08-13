@@ -12,7 +12,7 @@ public static partial class EnumerableExtensions
     {
         var set = new HashSet<TKey>(second.Select(keySelector), comparer);
 
-        foreach (TSource element in first)
+        foreach (var element in first)
         {
             if (set.Remove(keySelector(element)))
             {
