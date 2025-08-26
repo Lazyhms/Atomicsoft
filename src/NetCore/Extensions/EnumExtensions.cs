@@ -9,6 +9,6 @@ public static class EnumExtensions
         return type.GetField(name, BindingFlags.Public | BindingFlags.Static)?.GetCustomAttribute<T>(false);
     }
 
-    public static string? GetDescription(this Enum enumValue) =>
-        enumValue.GetAttributeOfType<DescriptionAttribute>()?.Description;
+    public static string? GetDescription(this Enum enumValue)
+        => enumValue.GetAttributeOfType<DescriptionAttribute>()?.Description;
 }

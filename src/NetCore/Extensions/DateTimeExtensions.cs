@@ -5,26 +5,35 @@ public static partial class DateTimeExtensions
     public static bool HasOverlap(this DateTime start1, DateTime end1, DateTime start2, DateTime end2)
         => start1 <= end2 && end1 >= start2;
 
-    public static DateTime StartOfDay(this DateTime date) =>
-        DateTime.SpecifyKind(date.Date, date.Kind);
+    public static DateTime StartOfDay(this DateTime date)
+        => DateTime.SpecifyKind(date.Date, date.Kind);
 
-    public static DateTime EndOfDay(this DateTime date) =>
-        DateTime.SpecifyKind(date.Date.AddDays(1).AddTicks(-1), date.Kind);
+    public static DateTime EndOfDay(this DateTime date)
+        => DateTime.SpecifyKind(date.Date.AddDays(1).AddTicks(-1), date.Kind);
 
-    public static (DateTime Start, DateTime End) DailyRange(this DateTime date) =>
-        (date.StartOfDay(), date.EndOfDay());
+    public static (DateTime Start, DateTime End) DailyRange(this DateTime date)
+        => (date.StartOfDay(), date.EndOfDay());
 
-    public static DateTime StartOfMonth(this DateTime date) =>
-        DateTime.SpecifyKind(new DateTime(date.Year, date.Month, 1), date.Kind);
+    public static DateTime StartOfWeek(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => DateTime.SpecifyKind(date.Date.AddDays(-1 * (7 + (date.DayOfWeek - startOfWeek)) % 7), date.Kind);
 
-    public static DateTime EndOfMonth(this DateTime date) =>
-        DateTime.SpecifyKind(new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).AddDays(1).AddTicks(-1), date.Kind);
+    public static DateTime EndOfWeek(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => DateTime.SpecifyKind(date.StartOfWeek(startOfWeek).AddDays(7).AddTicks(-1), date.Kind);
 
-    public static (DateTime Start, DateTime End) MonthlyRange(this DateTime date) =>
-        (date.StartOfMonth(), date.EndOfMonth());
+    public static (DateTime Start, DateTime End) WeeklyRange(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => (date.StartOfWeek(startOfWeek), date.EndOfWeek(startOfWeek));
 
-    public static int Quarter(this DateTime date) =>
-        (date.Month - 1) / 3 + 1;
+    public static DateTime StartOfMonth(this DateTime date)
+        => DateTime.SpecifyKind(new DateTime(date.Year, date.Month, 1), date.Kind);
+
+    public static DateTime EndOfMonth(this DateTime date)
+        => DateTime.SpecifyKind(new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).AddDays(1).AddTicks(-1), date.Kind);
+
+    public static (DateTime Start, DateTime End) MonthlyRange(this DateTime date)
+        => (date.StartOfMonth(), date.EndOfMonth());
+
+    public static int Quarter(this DateTime date)
+        => (date.Month - 1) / 3 + 1;
 
     public static DateTime StartOfQuarter(this DateTime date)
     {
@@ -44,11 +53,11 @@ public static partial class DateTimeExtensions
         return DateTime.SpecifyKind(end, date.Kind);
     }
 
-    public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime date) =>
-        (date.StartOfQuarter(), date.EndOfQuarter());
+    public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime date)
+        => (date.StartOfQuarter(), date.EndOfQuarter());
 
-    public static DateTime StartOfYear(this DateTime date) =>
-        DateTime.SpecifyKind(new DateTime(date.Year, 1, 1), date.Kind);
+    public static DateTime StartOfYear(this DateTime date)
+        => DateTime.SpecifyKind(new DateTime(date.Year, 1, 1), date.Kind);
 
     public static DateTime EndOfYear(this DateTime date)
     {
@@ -56,8 +65,8 @@ public static partial class DateTimeExtensions
         return DateTime.SpecifyKind(end, date.Kind);
     }
 
-    public static (DateTime Start, DateTime End) YearlyRange(this DateTime date) =>
-        (date.StartOfYear(), date.EndOfYear());
+    public static (DateTime Start, DateTime End) YearlyRange(this DateTime date)
+        => (date.StartOfYear(), date.EndOfYear());
 
     public static async Task WaitForNextMinuteAsync(CancellationToken stoppingToken = default)
     {

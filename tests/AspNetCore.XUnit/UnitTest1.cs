@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Converters.Value;
 using Xunit;
 
 namespace AspNetCore.XUnit;
@@ -14,7 +15,7 @@ public class UnitTest1
     [Fact]
     public void Test1()
     {
-
+        var t3 = DateTime.Now.AddDays(-4).StartOfWeek();
 
 
         var jsonArray = JsonSerializer.SerializeToNode(new object[] { new { id = 1, name = "2" }, new { id = 2, name = "3" } });
