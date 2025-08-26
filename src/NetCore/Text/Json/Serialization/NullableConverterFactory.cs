@@ -1,5 +1,4 @@
-﻿
-namespace System.Text.Json.Serialization;
+﻿namespace System.Text.Json.Serialization;
 
 /// <summary>
 /// 

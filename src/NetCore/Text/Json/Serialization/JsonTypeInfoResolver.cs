@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization.Metadata;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization.Metadata;
 
 namespace System.Text.Json.Serialization;
 

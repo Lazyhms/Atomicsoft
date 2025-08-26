@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace System.Text.Json.Serialization.Converters.Value;
+namespace System.Text.Json.Serialization;
 
 public sealed class DateTimeConverter(string dateFormatString) : JsonConverter<DateTime>
 {

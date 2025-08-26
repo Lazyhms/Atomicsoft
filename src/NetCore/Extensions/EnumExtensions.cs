@@ -1,4 +1,6 @@
-﻿namespace System;
+﻿using System.ComponentModel;
+
+namespace System;
 
 public static class EnumExtensions
 {

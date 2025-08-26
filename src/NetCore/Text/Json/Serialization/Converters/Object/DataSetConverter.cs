@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace System.Text.Json.Serialization.Converters.Object;
+namespace System.Text.Json.Serialization;
 
 public sealed class DataSetConverter : JsonConverter<DataSet>
 {

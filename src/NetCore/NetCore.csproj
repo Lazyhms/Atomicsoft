@@ -14,7 +14,6 @@
 		<Using Include="System" />
 		<Using Include="System.Reflection" />
 		<Using Include="System.Collections" />
-		<Using Include="System.ComponentModel" />
 		<Using Include="System.Linq.Expressions" />
 		<Using Include="System.Collections.Generic" />
 	</ItemGroup>

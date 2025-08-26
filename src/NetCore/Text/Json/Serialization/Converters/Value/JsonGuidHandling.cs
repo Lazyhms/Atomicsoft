@@ -1,4 +1,4 @@
-﻿namespace System.Text.Json.Serialization.Converters.Value;
+﻿namespace System.Text.Json.Serialization;
 
 [Flags]
 public enum JsonGuidHandling
