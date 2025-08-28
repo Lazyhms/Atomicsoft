@@ -5,126 +5,153 @@ public static partial class DateTimeExtensions
     public static bool HasOverlap(this DateTime start1, DateTime end1, DateTime start2, DateTime end2)
         => start1 <= end2 && end1 >= start2;
 
-    public static DateTime StartOfDay(this DateTime date)
-        => DateTime.SpecifyKind(date.Date, date.Kind);
+    #region Day
 
-    public static DateTime EndOfDay(this DateTime date)
-        => DateTime.SpecifyKind(date.Date.AddDays(1).AddTicks(-1), date.Kind);
+    public static DateTime StartOfDay(this DateTime dateTime)
+        => DateTime.SpecifyKind(dateTime.Date, dateTime.Kind);
 
-    public static (DateTime Start, DateTime End) DailyRange(this DateTime date)
-        => (date.StartOfDay(), date.EndOfDay());
+    public static DateTime EndOfDay(this DateTime dateTime)
+        => DateTime.SpecifyKind(dateTime.Date.AddDays(1).AddTicks(-1), dateTime.Kind);
 
-    public static DateTime StartOfWeek(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
-        => DateTime.SpecifyKind(date.Date.AddDays(-1 * (7 + (date.DayOfWeek - startOfWeek)) % 7), date.Kind);
+    public static (DateTime Start, DateTime End) DailyRange(this DateTime dateTime)
+        => (dateTime.StartOfDay(), dateTime.EndOfDay());
 
-    public static DateTime EndOfWeek(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
-        => DateTime.SpecifyKind(date.StartOfWeek(startOfWeek).AddDays(7).AddTicks(-1), date.Kind);
+    #endregion
 
-    public static (DateTime Start, DateTime End) WeeklyRange(this DateTime date, DayOfWeek startOfWeek = DayOfWeek.Monday)
-        => (date.StartOfWeek(startOfWeek), date.EndOfWeek(startOfWeek));
+    #region Week
 
-    public static DateTime StartOfMonth(this DateTime date)
-        => DateTime.SpecifyKind(new DateTime(date.Year, date.Month, 1), date.Kind);
+    public static DateTime StartOfWeek(this DateTime dateTime, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => DateTime.SpecifyKind(dateTime.Date.AddDays(-1 * (7 + (dateTime.DayOfWeek - startOfWeek)) % 7), dateTime.Kind);
 
-    public static DateTime EndOfMonth(this DateTime date)
-        => DateTime.SpecifyKind(new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month)).AddDays(1).AddTicks(-1), date.Kind);
+    public static DateTime EndOfWeek(this DateTime dateTime, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => DateTime.SpecifyKind(dateTime.StartOfWeek(startOfWeek).AddDays(7).AddTicks(-1), dateTime.Kind);
 
-    public static (DateTime Start, DateTime End) MonthlyRange(this DateTime date)
-        => (date.StartOfMonth(), date.EndOfMonth());
+    public static (DateTime Start, DateTime End) WeeklyRange(this DateTime dateTime, DayOfWeek startOfWeek = DayOfWeek.Monday)
+        => (dateTime.StartOfWeek(startOfWeek), dateTime.EndOfWeek(startOfWeek));
 
-    public static int Quarter(this DateTime date)
-        => (date.Month - 1) / 3 + 1;
+    #endregion
 
-    public static DateTime StartOfQuarter(this DateTime date)
+    #region Month
+
+    public static DateTime StartOfMonth(this DateTime dateTime)
+        => DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, 1), dateTime.Kind);
+
+    public static DateTime EndOfMonth(this DateTime dateTime)
+        => DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month)).AddDays(1).AddTicks(-1), dateTime.Kind);
+
+    public static (DateTime Start, DateTime End) MonthlyRange(this DateTime dateTime)
+        => (dateTime.StartOfMonth(), dateTime.EndOfMonth());
+
+    #endregion
+
+    #region Quarter
+
+    public static int Quarter(this DateTime dateTime)
+        => (dateTime.Month - 1) / 3 + 1;
+
+    public static DateTime StartOfQuarter(this DateTime dateTime)
     {
-        var quarter = date.Quarter();
-        var startMonth = (quarter - 1) * 3 + 1;
-        return DateTime.SpecifyKind(new DateTime(date.Year, startMonth, 1), date.Kind);
+        var startMonth = (dateTime.Quarter() - 1) * 3 + 1;
+        return DateTime.SpecifyKind(new DateTime(dateTime.Year, startMonth, 1), dateTime.Kind);
     }
 
-    public static DateTime EndOfQuarter(this DateTime date)
+    public static DateTime EndOfQuarter(this DateTime dateTime)
     {
-        var quarter = date.Quarter();
-        var endMonth = quarter * 3;
-        var daysInMonth = DateTime.DaysInMonth(date.Year, endMonth);
+        var endMonth = dateTime.Quarter() * 3;
+        var daysInMonth = DateTime.DaysInMonth(dateTime.Year, endMonth);
 
-        var end = new DateTime(date.Year, endMonth, daysInMonth)
-                  .AddDays(1).AddTicks(-1);
-        return DateTime.SpecifyKind(end, date.Kind);
+        var end = new DateTime(dateTime.Year, endMonth, daysInMonth).AddDays(1).AddTicks(-1);
+        return DateTime.SpecifyKind(end, dateTime.Kind);
     }
 
-    public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime date)
-        => (date.StartOfQuarter(), date.EndOfQuarter());
+    public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime dateTime)
+        => (dateTime.StartOfQuarter(), dateTime.EndOfQuarter());
 
-    public static DateTime StartOfYear(this DateTime date)
-        => DateTime.SpecifyKind(new DateTime(date.Year, 1, 1), date.Kind);
+    #endregion
 
-    public static DateTime EndOfYear(this DateTime date)
+    #region Year
+
+    public static DateTime StartOfYear(this DateTime dateTime)
+        => DateTime.SpecifyKind(new DateTime(dateTime.Year, 1, 1), dateTime.Kind);
+
+    public static DateTime EndOfYear(this DateTime dateTime)
     {
-        var end = new DateTime(date.Year, 12, 31).AddDays(1).AddTicks(-1);
-        return DateTime.SpecifyKind(end, date.Kind);
+        var end = new DateTime(dateTime.Year, 12, 31).AddDays(1).AddTicks(-1);
+        return DateTime.SpecifyKind(end, dateTime.Kind);
     }
 
-    public static (DateTime Start, DateTime End) YearlyRange(this DateTime date)
-        => (date.StartOfYear(), date.EndOfYear());
+    public static (DateTime Start, DateTime End) YearlyRange(this DateTime dateTime)
+        => (dateTime.StartOfYear(), dateTime.EndOfYear());
 
-    public static async Task WaitForNextMinuteAsync(CancellationToken stoppingToken = default)
+    #endregion
+
+    #region Wait For Next
+
+    public static async Task WaitForNextMinuteAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var utcNow = DateTime.UtcNow;
-        var nextMinute = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, utcNow.Minute, 0).AddMinutes(1);
+        var nextMinute = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0).AddMinutes(1);
 
-        var delay = nextMinute - utcNow;
+        var delay = nextMinute - dateTime;
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay, stoppingToken);
         }
     }
 
-    public static async Task WaitForNextHourAsync(CancellationToken stoppingToken = default)
+    public static async Task WaitForNextHourAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var utcNow = DateTime.UtcNow;
-        var nextHour = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, utcNow.Hour, 0, 0).AddHours(1);
+        var nextHour = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0).AddHours(1);
 
-        var delay = nextHour - utcNow;
+        var delay = nextHour - dateTime;
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay, stoppingToken);
         }
     }
 
-    public static async Task WaitForNextDayAsync(CancellationToken stoppingToken = default)
+    public static async Task WaitForNextDayAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var utcNow = DateTime.UtcNow;
-        var nextDay = new DateTime(utcNow.Year, utcNow.Month, utcNow.Day, 0, 0, 0).AddDays(1);
+        var nextDay = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0).AddDays(1);
 
-        var delay = nextDay - utcNow;
+        var delay = nextDay - dateTime;
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay, stoppingToken);
         }
     }
 
-    public static async Task WaitForNextMonthAsync(CancellationToken stoppingToken = default)
+    public static async Task WaitForNextMonthAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var utcNow = DateTime.UtcNow;
-        var nextMonth = new DateTime(utcNow.Year, utcNow.Month, 1, 0, 0, 0).AddMonths(1);
+        var nextMonth = new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0).AddMonths(1);
 
-        var delay = nextMonth - utcNow;
+        var delay = nextMonth - dateTime;
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay, stoppingToken);
         }
     }
 
-    public static async Task WaitForNextYearAsync(CancellationToken stoppingToken = default)
+    public static async Task WaitForNextQuarterAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var utcNow = DateTime.UtcNow;
-        var nextYear = new DateTime(utcNow.Year, 1, 1, 0, 0, 0).AddYears(1);
+        var nextQuarter = new DateTime(dateTime.Year, dateTime.Quarter() * 3, 1, 0, 0, 0).AddMonths(1);
 
-        var delay = nextYear - utcNow;
+        var delay = nextQuarter - dateTime;
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay, stoppingToken);
         }
     }
+
+    public static async Task WaitForNextYearAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
+    {
+        var nextYear = new DateTime(dateTime.Year, 1, 1, 0, 0, 0).AddYears(1);
+
+        var delay = nextYear - dateTime;
+        if (delay > TimeSpan.Zero)
+        {
+            await Task.Delay(delay, stoppingToken);
+        }
+    }
+
+    #endregion
 }
