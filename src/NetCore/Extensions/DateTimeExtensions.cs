@@ -37,7 +37,7 @@ public static partial class DateTimeExtensions
         => DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, 1), dateTime.Kind);
 
     public static DateTime EndOfMonth(this DateTime dateTime)
-        => DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month)).AddDays(1).AddTicks(-1), dateTime.Kind);
+        => DateTime.SpecifyKind(dateTime.StartOfMonth().AddMonths(1).AddTicks(-1), dateTime.Kind);
 
     public static (DateTime Start, DateTime End) MonthlyRange(this DateTime dateTime)
         => (dateTime.StartOfMonth(), dateTime.EndOfMonth());
@@ -50,19 +50,10 @@ public static partial class DateTimeExtensions
         => (dateTime.Month - 1) / 3 + 1;
 
     public static DateTime StartOfQuarter(this DateTime dateTime)
-    {
-        var startMonth = (dateTime.Quarter() - 1) * 3 + 1;
-        return DateTime.SpecifyKind(new DateTime(dateTime.Year, startMonth, 1), dateTime.Kind);
-    }
+        => DateTime.SpecifyKind(new DateTime(dateTime.Year, (dateTime.Quarter() - 1) * 3 + 1, 1), dateTime.Kind);
 
     public static DateTime EndOfQuarter(this DateTime dateTime)
-    {
-        var endMonth = dateTime.Quarter() * 3;
-        var daysInMonth = DateTime.DaysInMonth(dateTime.Year, endMonth);
-
-        var end = new DateTime(dateTime.Year, endMonth, daysInMonth).AddDays(1).AddTicks(-1);
-        return DateTime.SpecifyKind(end, dateTime.Kind);
-    }
+        => DateTime.SpecifyKind(dateTime.StartOfQuarter().AddMonths(3).AddTicks(-1), dateTime.Kind);
 
     public static (DateTime Start, DateTime End) QuarterlyRange(this DateTime dateTime)
         => (dateTime.StartOfQuarter(), dateTime.EndOfQuarter());
@@ -89,7 +80,7 @@ public static partial class DateTimeExtensions
 
     public static async Task WaitForNextMinuteAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextMinute = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0).AddMinutes(1);
+        var nextMinute = DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, 0), dateTime.Kind).AddMinutes(1);
 
         var delay = nextMinute - dateTime;
         if (delay > TimeSpan.Zero)
@@ -100,7 +91,7 @@ public static partial class DateTimeExtensions
 
     public static async Task WaitForNextHourAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextHour = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0).AddHours(1);
+        var nextHour = DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, 0, 0), dateTime.Kind).AddHours(1);
 
         var delay = nextHour - dateTime;
         if (delay > TimeSpan.Zero)
@@ -111,7 +102,7 @@ public static partial class DateTimeExtensions
 
     public static async Task WaitForNextDayAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextDay = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0).AddDays(1);
+        var nextDay = DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0), dateTime.Kind).AddDays(1);
 
         var delay = nextDay - dateTime;
         if (delay > TimeSpan.Zero)
@@ -122,7 +113,7 @@ public static partial class DateTimeExtensions
 
     public static async Task WaitForNextMonthAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextMonth = new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0).AddMonths(1);
+        var nextMonth = DateTime.SpecifyKind(new DateTime(dateTime.Year, dateTime.Month, 1, 0, 0, 0), dateTime.Kind).AddMonths(1);
 
         var delay = nextMonth - dateTime;
         if (delay > TimeSpan.Zero)
@@ -133,23 +124,49 @@ public static partial class DateTimeExtensions
 
     public static async Task WaitForNextQuarterAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextQuarter = new DateTime(dateTime.Year, dateTime.Quarter() * 3, 1, 0, 0, 0).AddMonths(1);
+        var nextQuarter = DateTime.SpecifyKind(dateTime.EndOfQuarter().AddTicks(1), dateTime.Kind);
 
-        var delay = nextQuarter - dateTime;
-        if (delay > TimeSpan.Zero)
+        var maxDelay = TimeSpan.FromMilliseconds(int.MaxValue);
+        var currentTime = dateTime;
+
+        while (true)
         {
-            await Task.Delay(delay, stoppingToken);
+            stoppingToken.ThrowIfCancellationRequested();
+
+            var delay = nextQuarter - currentTime;
+            if (delay <= TimeSpan.Zero)
+            {
+                break;
+            }
+
+            var actualDelay = delay > maxDelay ? maxDelay : delay;
+            await Task.Delay(actualDelay, stoppingToken);
+
+            currentTime = DateTime.Now;
         }
     }
 
     public static async Task WaitForNextYearAsync(this DateTime dateTime, CancellationToken stoppingToken = default)
     {
-        var nextYear = new DateTime(dateTime.Year, 1, 1, 0, 0, 0).AddYears(1);
+        var nextYear = DateTime.SpecifyKind(new DateTime(dateTime.Year, 1, 1, 0, 0, 0).AddYears(1), dateTime.Kind);
 
-        var delay = nextYear - dateTime;
-        if (delay > TimeSpan.Zero)
+        var maxDelay = TimeSpan.FromMilliseconds(int.MaxValue);
+        var currentTime = dateTime;
+
+        while (true)
         {
-            await Task.Delay(delay, stoppingToken);
+            stoppingToken.ThrowIfCancellationRequested();
+
+            var delay = nextYear - currentTime;
+            if (delay <= TimeSpan.Zero)
+            {
+                break;
+            }
+
+            var actualDelay = delay > maxDelay ? maxDelay : delay;
+            await Task.Delay(actualDelay, stoppingToken);
+
+            currentTime = DateTime.Now;
         }
     }
 

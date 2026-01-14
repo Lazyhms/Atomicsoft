@@ -4,4 +4,5 @@
 // a specific target and scoped to a namespace, type, member, etc.
 
 [assembly: SuppressMessage("Style", "IDE0130:命名空间与文件夹结构不匹配", Justification = "<挂起>", Scope = "namespace", Target = "~N:System")]
+[assembly: SuppressMessage("Style", "IDE0130:命名空间与文件夹结构不匹配", Justification = "<挂起>", Scope = "namespace", Target = "~N:System.Text.Json")]
 [assembly: SuppressMessage("Style", "IDE0130:命名空间与文件夹结构不匹配", Justification = "<挂起>", Scope = "namespace", Target = "~N:System.Text.Json.Serialization")]
